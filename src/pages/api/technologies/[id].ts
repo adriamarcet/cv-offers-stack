@@ -40,9 +40,22 @@ export const PATCH: APIRoute = async ({ params, request }) => {
       });
     }
 
+    const existingTechnology = technologies[technologyIndex];
+    if (!existingTechnology) {
+      return new Response(JSON.stringify({ error: 'Technology not found' }), {
+        status: 404,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    }
+    
     const updatedTechnology: Technology = {
-      ...technologies[technologyIndex],
+      id: existingTechnology.id,
+      name: existingTechnology.name,
+      category: existingTechnology.category,
       count: body.count,
+      createdAt: existingTechnology.createdAt,
       updatedAt: new Date(),
     };
 

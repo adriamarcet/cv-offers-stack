@@ -32,7 +32,7 @@ A responsive web application for tracking technology requirements from job posti
 ## 📦 Installation
 
 ### Prerequisites
-- Node.js 18+ 
+- Node.js 20+ 
 - npm or yarn
 
 ### Setup Instructions
