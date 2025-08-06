@@ -1,14 +1,13 @@
 import type { APIRoute } from 'astro';
-import type { Technology } from '../../../types/Technology';
+import type { Technology, TechnologyUpdateData } from '../../../types/Technology';
+import { technologyApi } from '../../../utils/supabase';
 
-// In-memory storage for demo purposes
-// In production, this would be replaced with a real database
-let technologies: Technology[] = [];
+// Fallback in-memory storage for demo purposes
+let fallbackTechnologies: Technology[] = [];
 
 export const PATCH: APIRoute = async ({ params, request }) => {
   try {
     const { id } = params;
-    
     if (!id) {
       return new Response(JSON.stringify({ error: 'Technology ID is required' }), {
         status: 400,
@@ -18,7 +17,7 @@ export const PATCH: APIRoute = async ({ params, request }) => {
       });
     }
 
-    const body = await request.json() as { count: number };
+    const body = await request.json() as TechnologyUpdateData;
     
     if (typeof body.count !== 'number' || body.count < 0) {
       return new Response(JSON.stringify({ error: 'Count must be a non-negative number' }), {
@@ -29,7 +28,22 @@ export const PATCH: APIRoute = async ({ params, request }) => {
       });
     }
 
-    const technologyIndex = technologies.findIndex(tech => tech.id === id);
+    // Try to update in Supabase first
+    if (import.meta.env.PUBLIC_SUPABASE_URL) {
+      const updatedTechnology = await technologyApi.update(id, { count: body.count });
+      
+      if (updatedTechnology) {
+        return new Response(JSON.stringify(updatedTechnology), {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      }
+    }
+
+    // Fallback to in-memory storage
+    const technologyIndex = fallbackTechnologies.findIndex(tech => tech.id === id);
     
     if (technologyIndex === -1) {
       return new Response(JSON.stringify({ error: 'Technology not found' }), {
@@ -40,8 +54,8 @@ export const PATCH: APIRoute = async ({ params, request }) => {
       });
     }
 
-    const existingTechnology = technologies[technologyIndex];
-    if (!existingTechnology) {
+    const existingTech = fallbackTechnologies[technologyIndex];
+    if (!existingTech) {
       return new Response(JSON.stringify({ error: 'Technology not found' }), {
         status: 404,
         headers: {
@@ -50,18 +64,16 @@ export const PATCH: APIRoute = async ({ params, request }) => {
       });
     }
     
-    const updatedTechnology: Technology = {
-      id: existingTechnology.id,
-      name: existingTechnology.name,
-      category: existingTechnology.category,
+    fallbackTechnologies[technologyIndex] = {
+      id: existingTech.id,
+      name: existingTech.name,
+      category: existingTech.category,
       count: body.count,
-      createdAt: existingTechnology.createdAt,
+      createdAt: existingTech.createdAt,
       updatedAt: new Date(),
     };
 
-    technologies[technologyIndex] = updatedTechnology;
-
-    return new Response(JSON.stringify(updatedTechnology), {
+    return new Response(JSON.stringify(fallbackTechnologies[technologyIndex]), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
@@ -81,7 +93,6 @@ export const PATCH: APIRoute = async ({ params, request }) => {
 export const DELETE: APIRoute = async ({ params }) => {
   try {
     const { id } = params;
-    
     if (!id) {
       return new Response(JSON.stringify({ error: 'Technology ID is required' }), {
         status: 400,
@@ -91,7 +102,22 @@ export const DELETE: APIRoute = async ({ params }) => {
       });
     }
 
-    const technologyIndex = technologies.findIndex(tech => tech.id === id);
+    // Try to delete from Supabase first
+    if (import.meta.env.PUBLIC_SUPABASE_URL) {
+      const success = await technologyApi.delete(id);
+      
+      if (success) {
+        return new Response(JSON.stringify({ success: true }), {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      }
+    }
+
+    // Fallback to in-memory storage
+    const technologyIndex = fallbackTechnologies.findIndex(tech => tech.id === id);
     
     if (technologyIndex === -1) {
       return new Response(JSON.stringify({ error: 'Technology not found' }), {
@@ -102,10 +128,13 @@ export const DELETE: APIRoute = async ({ params }) => {
       });
     }
 
-    technologies.splice(technologyIndex, 1);
+    fallbackTechnologies.splice(technologyIndex, 1);
 
-    return new Response(null, {
-      status: 204,
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
   } catch (error) {
     console.error('Error deleting technology:', error);

@@ -26,7 +26,7 @@ A responsive web application for tracking technology requirements from job posti
 - **Design System**: Modern CSS with visual hierarchy and professional styling
 - **Styling**: Custom CSS with Inter font and modern color palette
 - **Deployment**: Netlify with serverless functions
-- **Database**: In-memory storage (demo) / Extensible for real database
+- **Database**: Supabase (PostgreSQL) with fallback to session storage
 - **Version Control**: Git workflow ready
 
 ## 📦 Installation
@@ -48,12 +48,17 @@ A responsive web application for tracking technology requirements from job posti
    npm install
    ```
 
-3. **Start development server**
+3. **Configure Supabase (Optional)**
+   - Follow the setup guide in `SUPABASE_SETUP.md`
+   - Create a `.env` file with your Supabase credentials
+   - The app works without Supabase using session storage
+
+4. **Start development server**
    ```bash
    npm run dev
    ```
 
-4. **Open your browser**
+5. **Open your browser**
    Navigate to `http://localhost:4321`
 
 ## 🚀 Deployment
@@ -131,8 +136,9 @@ cv-offers-stack/
 
 ### Data Persistence
 - Data is immediately saved to session storage
-- Automatic sync with database every 30 seconds
+- Automatic sync with Supabase database every 30 seconds
 - Works offline with local storage fallback
+- Configurable database backend (see SUPABASE_SETUP.md)
 
 ## 🧪 Testing
 

@@ -1,9 +1,9 @@
 import type { APIRoute } from 'astro';
 import type { Technology } from '../../../types/Technology';
+import { technologyApi } from '../../../utils/supabase';
 
-// In-memory storage for demo purposes
-// In production, this would be replaced with a real database
-let technologies: Technology[] = [];
+// Fallback in-memory storage for demo purposes
+let fallbackTechnologies: Technology[] = [];
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -30,12 +30,30 @@ export const POST: APIRoute = async ({ request }) => {
       }
     }
 
-    // Merge with existing technologies
-    const existingIds = new Set(technologies.map(tech => tech.id));
+    // Try to sync with Supabase first
+    if (import.meta.env.PUBLIC_SUPABASE_URL) {
+      const success = await technologyApi.sync(body.technologies);
+      
+      if (success) {
+        return new Response(JSON.stringify({ 
+          success: true, 
+          synced: body.technologies.length,
+          total: body.technologies.length 
+        }), {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      }
+    }
+
+    // Fallback to in-memory storage
+    const existingIds = new Set(fallbackTechnologies.map(tech => tech.id));
     const newTechnologies = body.technologies.filter(tech => !existingIds.has(tech.id));
     
     // Update existing technologies
-    const updatedTechnologies = technologies.map(existingTech => {
+    const updatedTechnologies = fallbackTechnologies.map(existingTech => {
       const incomingTech = body.technologies.find(tech => tech.id === existingTech.id);
       if (incomingTech) {
         return {
@@ -48,12 +66,12 @@ export const POST: APIRoute = async ({ request }) => {
     });
 
     // Add new technologies
-    technologies = [...updatedTechnologies, ...newTechnologies];
+    fallbackTechnologies = [...updatedTechnologies, ...newTechnologies];
 
     return new Response(JSON.stringify({ 
       success: true, 
       synced: body.technologies.length,
-      total: technologies.length 
+      total: fallbackTechnologies.length 
     }), {
       status: 200,
       headers: {
