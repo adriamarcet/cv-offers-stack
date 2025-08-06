@@ -33,9 +33,27 @@ export const saveTechnologiesToStorage = (technologies: Technology[]): void => {
 
 export const addTechnologyToStorage = (technology: Technology): Technology[] => {
   const technologies = getTechnologiesFromStorage();
-  const updatedTechnologies = [...technologies, technology];
-  saveTechnologiesToStorage(updatedTechnologies);
-  return updatedTechnologies;
+  
+  // Check if a technology with the same name already exists
+  const existingTechnology = technologies.find(tech => 
+    tech.name.toLowerCase() === technology.name.toLowerCase()
+  );
+  
+  if (existingTechnology) {
+    // If technology exists, increment its count instead of creating a new instance
+    const updatedTechnologies = technologies.map(tech => 
+      tech.id === existingTechnology.id 
+        ? { ...tech, count: tech.count + 1, updatedAt: new Date() }
+        : tech
+    );
+    saveTechnologiesToStorage(updatedTechnologies);
+    return updatedTechnologies;
+  } else {
+    // If technology doesn't exist, add it as a new instance
+    const updatedTechnologies = [...technologies, technology];
+    saveTechnologiesToStorage(updatedTechnologies);
+    return updatedTechnologies;
+  }
 };
 
 export const updateTechnologyInStorage = (id: string, count: number): Technology[] => {
@@ -54,4 +72,27 @@ export const removeTechnologyFromStorage = (id: string): Technology[] => {
   const updatedTechnologies = technologies.filter(tech => tech.id !== id);
   saveTechnologiesToStorage(updatedTechnologies);
   return updatedTechnologies;
+};
+
+export const consolidateDuplicateTechnologies = (): Technology[] => {
+  const technologies = getTechnologiesFromStorage();
+  const consolidatedMap = new Map<string, Technology>();
+  
+  technologies.forEach(tech => {
+    const normalizedName = tech.name.toLowerCase();
+    
+    if (consolidatedMap.has(normalizedName)) {
+      // Technology exists, increment count
+      const existing = consolidatedMap.get(normalizedName)!;
+      existing.count += tech.count;
+      existing.updatedAt = new Date();
+    } else {
+      // New technology
+      consolidatedMap.set(normalizedName, { ...tech });
+    }
+  });
+  
+  const consolidatedTechnologies = Array.from(consolidatedMap.values());
+  saveTechnologiesToStorage(consolidatedTechnologies);
+  return consolidatedTechnologies;
 }; 

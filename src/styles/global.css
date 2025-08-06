@@ -48,6 +48,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: var(--space-xl);
+  padding-top: calc(var(--space-xl) + 80px); /* Add extra padding for fixed notifications */
   background-color: var(--white);
   min-height: 100vh;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -83,32 +84,121 @@
   font-weight: 400;
 }
 
-/* Sync Status with Visual Feedback */
-.sync-status {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-md);
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin-top: var(--space-lg);
-  box-shadow: var(--shadow-sm);
+/* Notification Bar Positioning - Fixed/Sticky positioning */
+.technology-tracker .mzp-c-notification-bar {
+  position: fixed !important;
+  top: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  max-width: 1200px !important;
+  width: calc(100% - 40px) !important;
+  z-index: 1000 !important;
+  margin: 0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
-.sync-status.sync-syncing {
-  background-color: var(--primary-blue);
-  color: var(--white);
+/* Ensure close button is visible */
+
+/* Notification animations */
+@keyframes notification-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
-.sync-status.sync-success {
-  background-color: var(--success-green);
-  color: var(--white);
+@keyframes notification-slide-out {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-100%);
+  }
 }
 
-.sync-status.sync-error {
-  background-color: var(--error-red);
-  color: var(--white);
+/* Ensure close button is visible */
+.mzp-c-notification-bar .mzp-c-notification-bar-button {
+  position: absolute !important;
+  right: 0 !important;
+  top: 0 !important;
+  width: 20px !important;
+  height: 20px !important;
+  background: url('/img/icons/close.svg') 50% / 20px 20px no-repeat !important;
+  border: none !important;
+  cursor: pointer !important;
+  text-indent: -9999px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  margin: 8px !important;
+}
+
+@media (min-width: 480px) {
+  .mzp-c-notification-bar .mzp-c-notification-bar-button {
+    width: 40px !important;
+    height: 100% !important;
+    margin: 0 !important;
+    background-color: #b1b1bc !important;
+    border-radius: 0 4px 4px 0 !important;
+  }
+  
+  .mzp-c-notification-bar .mzp-c-notification-bar-button:hover,
+  .mzp-c-notification-bar .mzp-c-notification-bar-button:focus {
+    background-color: #9595a2 !important;
+  }
+}
+
+/* Success notification close button */
+.mzp-c-notification-bar.mzp-t-success .mzp-c-notification-bar-button {
+  background-image: url('/img/icons/close.svg') !important;
+}
+
+@media (min-width: 480px) {
+  .mzp-c-notification-bar.mzp-t-success .mzp-c-notification-bar-button {
+    background-color: #2ac3a2 !important;
+  }
+  
+  .mzp-c-notification-bar.mzp-t-success .mzp-c-notification-bar-button:hover,
+  .mzp-c-notification-bar.mzp-t-success .mzp-c-notification-bar-button:focus {
+    background-color: #008787 !important;
+  }
+}
+
+/* Error notification close button */
+.mzp-c-notification-bar.mzp-t-error .mzp-c-notification-bar-button {
+  background-image: url('/img/icons/close.svg') !important;
+}
+
+@media (min-width: 480px) {
+  .mzp-c-notification-bar.mzp-t-error .mzp-c-notification-bar-button {
+    background-color: #e22850 !important;
+  }
+  
+  .mzp-c-notification-bar.mzp-t-error .mzp-c-notification-bar-button:hover,
+  .mzp-c-notification-bar.mzp-t-error .mzp-c-notification-bar-button:focus {
+    background-color: #c50042 !important;
+  }
+}
+
+/* Warning notification close button */
+.mzp-c-notification-bar.mzp-t-warning .mzp-c-notification-bar-button {
+  background-image: url('/img/icons/close.svg') !important;
+}
+
+@media (min-width: 480px) {
+  .mzp-c-notification-bar.mzp-t-warning .mzp-c-notification-bar-button {
+    background-color: #ffbd4f !important;
+  }
+  
+  .mzp-c-notification-bar.mzp-t-warning .mzp-c-notification-bar-button:hover,
+  .mzp-c-notification-bar.mzp-t-warning .mzp-c-notification-bar-button:focus {
+    background-color: #ffa436 !important;
+  }
 }
 
 /* Main Layout with Clear Visual Separation */

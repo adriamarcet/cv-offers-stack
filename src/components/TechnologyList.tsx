@@ -8,6 +8,7 @@ interface TechnologyListProps {
   onDecrement: (id: string) => void;
   onDelete: (id: string) => void;
   isLoading?: boolean;
+  isInitialLoad?: boolean;
 }
 
 export const TechnologyList: React.FC<TechnologyListProps> = ({
@@ -15,13 +16,14 @@ export const TechnologyList: React.FC<TechnologyListProps> = ({
   onIncrement,
   onDecrement,
   onDelete,
-  isLoading = false
+  isLoading = false,
+  isInitialLoad = false
 }) => {
-  if (isLoading) {
+  if (isLoading || isInitialLoad) {
     return (
       <div className="technology-list-loading" role="status" aria-live="polite">
         <div className="loading-spinner" aria-hidden="true"></div>
-        <p>Loading technologies...</p>
+        <p>{isInitialLoad ? 'Loading from database...' : 'Loading technologies...'}</p>
       </div>
     );
   }
