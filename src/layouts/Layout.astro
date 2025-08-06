@@ -1,0 +1,97 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Track technologies from job postings and monitor their frequency" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+               <!-- Load Mozilla Protocol CSS -->
+           <link rel="stylesheet" href="/css/protocol.css">
+           <link rel="stylesheet" href="/css/protocol-components.css">
+           
+           <!-- Load global styles -->
+           <link rel="stylesheet" href="/src/styles/global.css">
+  </head>
+  <body>
+    <div id="app">
+      <slot />
+    </div>
+    
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">
+      Skip to main content
+    </a>
+  </body>
+</html>
+
+<style is:global>
+  /* Protocol-compatible base styles */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    line-height: 1.6;
+    color: #0c0c0d;
+    background-color: #ffffff;
+  }
+
+  /* Skip link for accessibility */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: #0060df;
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    border-radius: 4px;
+    z-index: 1000;
+  }
+
+  .skip-link:focus {
+    top: 6px;
+  }
+
+  /* Focus styles for accessibility */
+  *:focus {
+    outline: 2px solid #0060df;
+    outline-offset: 2px;
+  }
+
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+</style> 

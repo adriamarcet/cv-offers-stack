@@ -1,0 +1,39 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+@use '../../includes/lib' as *;
+
+blockquote {
+    @include bidi(((border-width, 0 0 0 5px, 0 5px 0 0),));
+    @include text-title-sm;
+    border-color: $color-marketing-gray-20;
+    border-style: solid;
+    color: $title-text-color;
+    font-family: $title-font-family;
+    font-weight: bold;
+    margin: $spacing-lg auto;
+    padding: $spacing-sm $spacing-lg;
+
+    cite {
+        @include text-title-xs;
+        color: $body-text-color-secondary;
+
+        &::before {
+            content: '— ';
+        }
+    }
+
+    & > :last-child {
+        margin-bottom: 0;
+    }
+
+    @supports (--css: variables) {
+        color: var(--title-text-color);
+        font-family: var(--title-font-family);
+
+        cite {
+            color: var(--body-text-color-secondary);
+        }
+    }
+}

@@ -1,0 +1,51 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+@use '../tokens';
+@use 'bidi';
+@use 'images';
+@use 'utils';
+
+@mixin details {
+    .is-summary {
+        button {
+            color: inherit;
+            cursor: pointer;
+            background: transparent;
+            font-family: inherit;
+            font-weight: inherit;
+            font-size: inherit;
+            text-align: inherit;
+            border: 0;
+            width: 100%;
+            position: relative;
+        }
+    }
+
+    .is-closed[aria-hidden='true'] {
+        display: none;
+    }
+}
+
+@mixin summary {
+    position: relative;
+    @include bidi.bidi(((padding-right, tokens.$layout-md, padding-left, 0),));
+
+    &::before {
+        background: images.$url-image-expand-black top left no-repeat;
+        @include utils.background-size(20px, 20px);
+        @include bidi.bidi(((right, 8px, left, auto),));
+        @include utils.transition(transform 100ms ease-in-out);
+        content: '';
+        height: 20px;
+        margin-top: -8px;
+        position: absolute;
+        top: 50%;
+        width: 20px;
+    }
+}
+
+@mixin summary-open {
+    @include utils.transform(rotate(45deg));
+}

@@ -1,0 +1,25 @@
+{
+  "name": "cv-offers-stack",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/netlify": "^4.0.0",
+    "@astrojs/react": "^3.0.0",
+    "@mozilla-protocol/core": "^21.1.0",
+    "astro": "^4.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "typescript": "^5.0.0"
+  }
+}

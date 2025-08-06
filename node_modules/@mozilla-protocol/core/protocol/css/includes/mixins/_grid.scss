@@ -1,0 +1,50 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+@use '../tokens';
+@use 'utils';
+
+// Grid columns
+$column-width: 8.333%; // 100% / 12 columns
+$gutter-width: tokens.$layout-sm;
+
+// Column spans for standard column widths
+// Usage:
+//  .foo { @include colspan(4); }
+@mixin colspan($columns) {
+    @include utils.border-box;
+    width: $column-width * $columns;
+    padding-left: $gutter-width * 0.5;
+    padding-right: $gutter-width * 0.5;
+}
+
+@mixin span-all {
+    float: none;
+    width: auto;
+}
+
+@mixin grid-quarter {
+    @include utils.border-box;
+    width: 25%;
+}
+
+@mixin grid-third {
+    @include utils.border-box;
+    width: 33.333%;
+}
+
+@mixin grid-half {
+    @include utils.border-box;
+    width: 50%;
+}
+
+@mixin grid-two-thirds {
+    @include utils.border-box;
+    width: 66.666%;
+}
+
+@mixin grid-three-quarters {
+    @include utils.border-box;
+    width: 75%;
+}
