@@ -48,7 +48,6 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: var(--space-xl);
-  padding-top: calc(var(--space-md) + 60px); /* Reduced padding for fixed notifications */
   background-color: var(--white);
   min-height: 100vh;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
