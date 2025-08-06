@@ -1,4 +1,6 @@
 ---
+import '../styles/global.css';
+
 export interface Props {
   title: string;
   description?: string;
@@ -22,11 +24,8 @@ const { title, description = "Track technologies from job postings and monitor t
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
                <!-- Load Mozilla Protocol CSS -->
-           <link rel="stylesheet" href="/css/protocol.css">
-           <link rel="stylesheet" href="/css/protocol-components.css">
-           
-           <!-- Load global styles -->
-           <link rel="stylesheet" href="/src/styles/global.css">
+    <link rel="stylesheet" href="/css/protocol.css">
+    <link rel="stylesheet" href="/css/protocol-components.css">
   </head>
   <body>
     <div id="app">
