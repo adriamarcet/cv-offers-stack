@@ -1,0 +1,9 @@
+import{r as u}from"./index.CVf8TyFT.js";var l={exports:{}},c={};/**
+ * @license React
+ * react-jsx-runtime.production.min.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */var _=u,g=Symbol.for("react.element"),h=Symbol.for("react.fragment"),y=Object.prototype.hasOwnProperty,v=_.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,b={key:!0,ref:!0,__self:!0,__source:!0};function p(r,e,s){var t,o={},n=null,i=null;s!==void 0&&(n=""+s),e.key!==void 0&&(n=""+e.key),e.ref!==void 0&&(i=e.ref);for(t in e)y.call(e,t)&&!b.hasOwnProperty(t)&&(o[t]=e[t]);if(r&&r.defaultProps)for(t in e=r.defaultProps,e)o[t]===void 0&&(o[t]=e[t]);return{$$typeof:g,type:r,key:n,ref:i,props:o,_owner:v.current}}c.Fragment=h;c.jsx=p;c.jsxs=p;l.exports=c;var a=l.exports;const w=({type:r,message:e,onClose:s,isVisible:t})=>{const[o,n]=u.useState(!1);if(u.useEffect(()=>{n(!!t)},[t]),!t&&!o)return null;const i=()=>{const m="mzp-c-notification-bar",x=`mzp-t-${r}`;return`${m} ${x}`},f=()=>{switch(r){case"success":return"✓";case"error":return"✗";case"warning":return"⚠";case"info":return"ℹ";default:return""}},d=()=>{s&&(n(!0),setTimeout(()=>{s()},300))};return a.jsxs("aside",{className:i(),role:"status","aria-live":"polite",style:{animation:t?"notification-slide-in 0.3s ease-out forwards":"notification-slide-out 0.3s ease-out forwards"},children:[a.jsx("button",{className:"mzp-c-notification-bar-button",type:"button",onClick:d,"aria-label":"Close notification",style:{position:"absolute",right:"0",top:"0",width:"20px",height:"20px",background:'url("/img/icons/close.svg") 50% / 20px 20px no-repeat',border:"none",cursor:"pointer",textIndent:"-9999px",overflow:"hidden",padding:"0",margin:"8px"},children:"Close notification"}),a.jsxs("p",{children:[a.jsx("span",{style:{marginRight:"8px"},children:f()}),e]})]})};export{w as N,a as j};

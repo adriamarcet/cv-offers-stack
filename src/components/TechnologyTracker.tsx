@@ -3,13 +3,13 @@ import type { Technology, TechnologyFormData } from '../types/Technology';
 import { TechnologyList } from './TechnologyList';
 import { AddTechnologyForm } from './AddTechnologyForm';
 import { NotificationBar, type NotificationType } from './NotificationBar';
-import { getTechnologiesFromStorage, addTechnologyToStorage, updateTechnologyInStorage, removeTechnologyFromStorage, saveTechnologiesToStorage, consolidateDuplicateTechnologies } from '../utils/storage';
+import { addTechnologyToStorage, updateTechnologyInStorage, removeTechnologyFromStorage, saveTechnologiesToStorage, consolidateDuplicateTechnologies } from '../utils/storage';
 import { apiClient } from '../utils/api';
 
 export const TechnologyTracker: React.FC = () => {
   const [technologies, setTechnologies] = useState<Technology[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'success' | 'error'>('idle');
+  // Removed syncStatus as it's no longer used with notification system
   const [notification, setNotification] = useState<{
     type: NotificationType;
     message: string;
@@ -36,7 +36,6 @@ export const TechnologyTracker: React.FC = () => {
           console.log('Loaded technologies from database:', dbTechnologies.length);
         } else {
           // No database data, try session storage
-          const storedTechnologies = getTechnologiesFromStorage();
           // Consolidate any duplicate technologies that might exist
           const consolidatedTechnologies = consolidateDuplicateTechnologies();
           setTechnologies(consolidatedTechnologies);
@@ -45,7 +44,6 @@ export const TechnologyTracker: React.FC = () => {
       } catch (error) {
         console.error('Error loading technologies:', error);
         // Fallback to session storage
-        const storedTechnologies = getTechnologiesFromStorage();
         // Consolidate any duplicate technologies that might exist
         const consolidatedTechnologies = consolidateDuplicateTechnologies();
         setTechnologies(consolidatedTechnologies);
@@ -64,18 +62,15 @@ export const TechnologyTracker: React.FC = () => {
     const syncWithDatabase = async () => {
       if (technologies.length === 0) return;
       
-      setSyncStatus('syncing');
       try {
         const success = await apiClient.syncTechnologies(technologies);
         if (success) {
-          setSyncStatus('success');
           setNotification({
             type: 'success',
             message: 'Data synced successfully',
             isVisible: true
           });
         } else {
-          setSyncStatus('error');
           setNotification({
             type: 'error',
             message: 'Sync failed - data saved locally',
@@ -84,7 +79,6 @@ export const TechnologyTracker: React.FC = () => {
         }
       } catch (error) {
         console.error('Sync failed:', error);
-        setSyncStatus('error');
         setNotification({
           type: 'error',
           message: 'Sync failed - data saved locally',
@@ -275,6 +269,7 @@ export const TechnologyTracker: React.FC = () => {
       
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [notification.isVisible, notification.type]);
 
   return (
